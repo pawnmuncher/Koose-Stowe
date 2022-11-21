@@ -1,0 +1,58 @@
+﻿//  Geting Started
+//  Let's look at what we are working: schema
+Books               //get book table schema
+| getschema 
+
+Shelves             //get shelves table schema
+| getschema 
+
+Books               //get them combined for later reference
+| union Shelves
+| getschema 
+
+//  OK, we know what we are working with
+// Each book has its parameters recorded: number of pages, weight.
+// Each book has RFID sticker attached (RFID: radio-transmitter with ID).
+Books
+| take 10
+
+// Each shelve in the Museum sends data: what RFIDs appear on the shelve and also measures actual total weight of books on the shelve.
+Shelves               //see some examples
+| take 10 
+
+Books               //see our target:  note the weight
+| where author contains "kustov"
+
+
+//  Formulate hypothesis
+// all books have a known weight
+// every shelf has rf_ids in an array
+// can correlate individual rf_ids using the books table to figure out weight, then sum shelves and compare actual vs expected weight
+// find the correct shelf for the book
+
+
+Shelves
+//expand the rf_ids array from shelves and cast tostring
+| mv-expand rf_ids to typeof(string)
+| take 100 
+
+Shelves
+//expand the rf_ids array from shelves first cast tostring
+| mv-expand rf_ids to typeof(string)
+// Join Books on left, by rf_ids to shelf on right by rf_id
+| join Books on $left.rf_ids == $right.rf_id
+//see examples
+| take 100 
+
+//  Solve
+Shelves
+//expand the rf_ids array from shelves first cast tostring
+| mv-expand rf_ids to typeof(string)
+// Join Books on left, by rf_ids to shelf on right by rf_id
+| join Books on $left.rf_ids == $right.rf_id
+// get total shelf_weight
+| summarize shelf_weight = sum(weight_gram) by shelf, total_weight
+// find the shelf where shelf_weight is light by an amount = or great that book weight
+| where total_weight - shelf_weight  > 1700
+
+
