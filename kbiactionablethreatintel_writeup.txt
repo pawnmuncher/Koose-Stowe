@@ -1,0 +1,58 @@
+﻿// KBI: Actionable Threat Intel.  room code: kbiactionablethreatintel
+
+//Task 1
+//  Q1: 50
+Employee | count
+
+//  Q2: Michael Cruz
+Employees | where name == "Michael Cruz" | project name, ip_addr
+
+//  Q3: 69
+Email | where recipient has "erin_lester" | count
+
+//  Q4: 49
+Email | where subject contains "kickoff" | distinct recipient | count
+
+
+//Task 2
+//  Q1: "alan_patel@acme.com"
+Email | where link has "interceptionreception.io" | distinct recipient | order by recipient asc 
+
+//  Q2: 0
+Email | where link has "interceptionreception.io" | where accepted == "False" | count
+
+//  Q3: 21
+let ips = PassiveDns
+| where domain == "interceptionreception.io"
+| distinct ip;
+PassiveDns
+| where ip in (ips) | count
+
+//  Q4: 69
+let ips = PassiveDns
+| where domain == "interceptionreception.io"
+| distinct ip;
+let malicious_domains = PassiveDns
+| where ip in (ips)
+| distinct domain;
+Email
+| where link has_any (malicious_domains)
+| distinct sender | count
+
+//  Q5: 59
+let ips = PassiveDns
+| where domain == "interceptionreception.io"
+| distinct ip;
+let malicious_domains = PassiveDns
+| where ip in (ips)
+| distinct domain;
+let malicious_links = Email
+| where link has_any (malicious_domains)
+| distinct link;
+OutboundBrowsing
+| where url in (malicious_links)
+| join kind=leftouter Employees on $left.src_ip == $right.ip_addr
+| summarize firstSeen=min(['time']) by url, src_ip, email_addr
+| count
+
+//  Q6: n/a
