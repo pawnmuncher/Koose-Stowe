@@ -1,0 +1,12 @@
+﻿Traffic
+| where Timestamp between (datetime(2022-10-16 08:17:00Z)..datetime(2022-10-16 08:31:00Z)) // cars that haven't moved between 8:17 and 8:31
+| join kind=rightanti (Traffic) on VIN
+| where Timestamp between (datetime(2022-10-16 08:31:00Z)..datetime(2022-10-16 08:40:00Z)) // cars that have move before the police come
+| where Ave == 157 and Street == 148                                                       // at the bank location
+| project VIN 
+| join kind=inner (Traffic) on VIN
+| summarize max(Timestamp) by VIN                                                          // Last movement = where the cars are parked
+| project VIN,max_Timestamp
+| join kind=inner (Traffic) on VIN, $left.max_Timestamp == $right.Timestamp
+| summarize count() by Ave,Street
+| where count_ >=3  

@@ -1,0 +1,21 @@
+﻿// Votes
+// | summarize Count=count() by vote, via_ip
+// | extend num = substring(tostring(Count),0,1)
+// | summarize Count=count() by num, vote
+// | sort by num asc
+// | render columnchart with (series=vote)
+
+
+
+// Votes
+// | summarize Count = count() by vote, via_ip, bin(Timestamp, 500ms)
+// | extend Count = iff(Count > 1, 0, Count)
+// | summarize Count=sum(Count) by vote
+// | as hint.materialized=true T
+// | extend Total = toscalar(T | summarize sum(Count))
+// | project vote, Percentage = round(Count*100.0 / Total, 2), Count
+// | order by Count
+
+
+Votes
+| summarize timetovote = count(vote) by via_ip
