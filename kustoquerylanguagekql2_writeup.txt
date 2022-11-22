@@ -1,0 +1,37 @@
+﻿//#2 of 5 Kusto Deeper Dive
+// roomcode: kustoquerylanguagekql2
+
+// Task 1
+//  Q1: Yay  The search operator searches across all the columns with all the tables of the database
+//  Q2: Nay  You can resue variables via the let and or set query statements
+//  Q3: Nay  You can declare both tables and lists
+//  Q4: Predicate
+//  Q5: Yay  The extend operator does exactly this.
+//  Q6: Yay
+//  Q7: Project
+//  Q8: n/a
+
+// Task 2
+//  Q1: Yay
+//  Q2: Yay
+//  Q3: Yay
+//  Q4: Nay  There is no severity() aggregate function
+//  Q5: Yay
+//  Q6: Nay
+//  Q7: Yay
+//  Q8: Contruct, Search, Filter
+//  Q9: n/a
+
+// Task 3
+//  Q1: Nay  Union() return all rows from all tables specified, also can use wildcard
+//  Q2: Yay
+//  Q3: innerunique
+//  Q5: n/a
+
+//Task 4
+//  Q1: externaldata
+//  Q2: "keyvalue pair data"
+//  Q3: Nay  Functions are a huge part of ADX/SEntinel and anywhere you can use Kusto
+
+//Task 5
+//  Q1: n/a
