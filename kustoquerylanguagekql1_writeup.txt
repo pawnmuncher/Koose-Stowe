@@ -1,0 +1,20 @@
+﻿//#1 of 5 Kusto Deep Dive
+// roomcode: kustoquerylanguagekql1
+
+// Task 1
+//  Q1: "Kusto Query Language"
+//  Q2: "Jacques Custeau"
+//  Q3: "tabluar expression, let, set"
+
+// Task 2
+//  Q1: Yes.  All resources for supporting gettin the ADX cluster setup are well documented and linked.
+
+// Task 3
+//  Q1: "System.DateTime,datetime"
+TraceLogs
+| getschema
+//  Q2: 158,617 
+TraceLogs | count //Pro Tip use shift+enter instead of clicking run
+//  Q3: 50.1
+TraceLogs| summarize count() by Componeent | render piechart
+
